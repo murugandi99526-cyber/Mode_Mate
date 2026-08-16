@@ -1,1 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeX — What's on your mind?</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="logo-symbol">V</div>
+        <h1>VibeX</h1>
+        <p>What's on your mind?</p>
+    </div>
+
+    <!-- Side Menu -->
+    <aside id="side-menu">
+        <div class="menu-logo">
+            <div class="small-logo">V</div>
+            <span>VibeX</span>
+        </div>
+
+        <nav>
+            <button data-section="home">🏠 Home</button>
+            <button data-section="search">🔎 Search</button>
+            <button data-section="games">🎮 Games</button>
+            <button data-section="challenges">🧠 Challenges</button>
+            <button data-section="music">🎵 Music</button>
+            <button data-section="movies">🎬 Movies</button>
+            <button data-section="friends">👥 Friends</button>
+            <button data-section="leaderboard">🏆 Leaderboard</button>
+            <button data-section="profile">👤 Profile</button>
+            <button data-section="notifications">🔔 Notifications</button>
+            <button data-section="settings">⚙️ Settings</button>
+        </nav>
+    </aside>
+
+    <!-- Main App -->
+    <main id="app">
+
+        <header>
+            <button id="menu-button">☰</button>
+            <div class="header-logo">VibeX</div>
+            <button id="notification-button">🔔</button>
+        </header>
+
+        <!-- HOME -->
+        <section id="home" class="page active">
+
+            <div class="hero">
+                <div class="hero-glow"></div>
+
+                <p class="eyebrow">WELCOME TO VIBEX</p>
+
+                <h1>What's on<br><span>your mind?</span></h1>
+
+                <p class="hero-text">
+                    Tell VibeX what you're thinking and discover
+                    something interesting to do.
+                </p>
+
+                <div class="thought-box">
+                    <textarea
+                        id="thought-input"
+                        placeholder="I'm bored and want something fun..."
+                    ></textarea>
+
+                    <button id="generate-button">
+                        ✨ Discover
+                    </button>
+                </div>
+
+                <div class="quick-options">
+                    <button data-thought="I'm bored and want something fun">😴 Bored</button>
+                    <button data-thought="I want to play a game">🎮 Play</button>
+                    <button data-thought="I want a brain challenge">🧠 Challenge</button>
+                    <button data-thought="I want to discover something new">🌟 Discover</button>
+                </div>
+            </div>
+
+            <div class="daily-grid">
+
+                <div class="daily-card">
+                    <span>🌟</span>
+                    <div>
+                        <small>DAILY ACTIVITY</small>
+                        <h3 id="daily-activity">Loading...</h3>
+                    </div>
+                </div>
+
+                <div class="daily-card">
+                    <span>🔥</span>
+                    <div>
+                        <small>DAILY CHALLENGE</small>
+                        <h3 id="daily-challenge">Loading...</h3>
+                    </div>
+                </div>
+
+            </div>
+
+            <section class="results-section">
+                <div class="section-heading">
+                    <div>
+                        <small>YOUR DISCOVERIES</small>
+                        <h2>Try something new</h2>
+                    </div>
+
+                    <button id="surprise-button">🎲 Surprise Me</button>
+                </div>
+
+                <div id="suggestions" class="card-grid"></div>
+            </section>
+
+        </section>
+
+        <!-- SEARCH -->
+        <section id="search" class="page">
+            <div class="page-title">
+                <small>DISCOVER</small>
+                <h1>Search</h1>
+            </div>
+
+            <input
+                id="search-input"
+                class="search-box"
+                type="text"
+                placeholder="Search VibeX..."
+            >
+
+            <div id="search-results"></div>
+        </section>
+
+        <!-- GAMES -->
+        <section id="games" class="page">
+            <div class="page-title">
+                <small>PLAY</small>
+                <h1>Skill Games</h1>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <h2>Reaction Test</h2>
+                <p>Test how quickly you can react.</p>
+
+                <button id="reaction-button" class="primary-button">
+                    Start Game
+                </button>
+
+                <div id="reaction-result"></div>
+            </div>
+        </section>
+
+        <!-- CHALLENGES -->
+        <section id="challenges" class="page">
+            <div class="page-title">
+                <small>THINK</small>
+                <h1>Brain Challenges</h1>
+            </div>
+
+            <div id="challenge-card" class="feature-card">
+                <span class="feature-icon">🧠</span>
+                <h2 id="challenge-question">Ready?</h2>
+
+                <div id="challenge-options"></div>
+
+                <button id="next-challenge" class="primary-button">
+                    New Challenge
+                </button>
+            </div>
+        </section>
+
+        <!-- MUSIC -->
+        <section id="music" class="page">
+            <div class="page-title">
+                <small>LISTEN</small>
+                <h1>Music</h1>
+            </div>
+
+            <div class="content-list">
+                <div>🎵 Chill & Relax</div>
+                <div>🔥 Energetic</div>
+                <div>🌙 Late Night</div>
+                <div>⚡ High Energy</div>
+            </div>
+        </section>
+
+        <!-- MOVIES -->
+        <section id="movies" class="page">
+            <div class="page-title">
+                <small>WATCH</small>
+                <h1>Movies & Entertainment</h1>
+            </div>
+
+            <div class="content-list">
+                <div>😂 Something Funny</div>
+                <div>🚀 Adventure</div>
+                <div>🧩 Mystery</div>
+                <div>❤️ Feel-Good</div>
+            </div>
+        </section>
+
+        <!-- FRIENDS -->
+        <section id="friends" class="page">
+            <div class="page-title">
+                <small>CONNECT</small>
+                <h1>Friends</h1>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">👥</span>
+                <h2>Friends & Challenges</h2>
+                <p>
+                    Friend accounts and messaging will be connected
+                    through a secure backend in a future version.
+                </p>
+            </div>
+        </section>
+
+        <!-- LEADERBOARD -->
+        <section id="leaderboard" class="page">
+            <div class="page-title">
+                <small>COMPETE</small>
+                <h1>Leaderboard</h1>
+            </div>
+
+            <div class="leaderboard">
+                <div>🥇 Alex — 2,450 XP</div>
+                <div>🥈 Sam — 2,180 XP</div>
+                <div>🥉 Jordan — 1,960 XP</div>
+                <div>4️⃣ Taylor — 1,740 XP</div>
+                <div>5️⃣ You — 1,520 XP</div>
+            </div>
+        </section>
+
+        <!-- PROFILE -->
+        <section id="profile" class="page">
+            <div class="page-title">
+                <small>YOUR SPACE</small>
+                <h1>Profile</h1>
+            </div>
+
+            <div class="profile-card">
+                <div class="avatar">V</div>
+                <h2>Vibe Explorer</h2>
+                <p>Level 5</p>
+
+                <div class="stats">
+                    <div>
+                        <strong>1,520</strong>
+                        <span>Points</span>
+                    </div>
+
+                    <div>
+                        <strong>12</strong>
+                        <span>Badges</span>
+                    </div>
+
+                    <div>
+                        <strong>7</strong>
+                        <span>Day Streak</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOTIFICATIONS -->
+        <section id="notifications" class="page">
+            <div class="page-title">
+                <small>UPDATES</small>
+                <h1>Notifications</h1>
+            </div>
+
+            <div class="content-list">
+                <div>🔥 Your daily challenge is ready!</div>
+                <div>🏆 You reached Level 5.</div>
+                <div>🌟 A new activity is waiting for you.</div>
+            </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="settings" class="page">
+            <div class="page-title">
+                <small>CONTROL</small>
+                <h1>Settings</h1>
+            </div>
+
+            <div class="content-list">
+                <div>🔐 Privacy</div>
+                <div>🛡️ Safety</div>
+                <div>🔔 Notifications</div>
+                <div>ℹ️ About VibeX</div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+  </html>
