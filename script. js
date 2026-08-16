@@ -1,1 +1,467 @@
+// VibeX — Final Frontend Prototype
 
+const suggestions = [
+    {
+        category: "GAMES",
+        title: "Try a Reaction Test",
+        description: "Test your reflexes with a quick reaction challenge.",
+        keywords: ["bored", "fun", "game", "play"]
+    },
+    {
+        category: "BRAIN",
+        title: "Solve a Logic Puzzle",
+        description: "Give your brain a quick workout with a tricky puzzle.",
+        keywords: ["challenge", "brain", "think", "puzzle"]
+    },
+    {
+        category: "LEARN",
+        title: "Discover a Strange Fact",
+        description: "Learn something surprising in less than a minute.",
+        keywords: ["learn", "fact", "discover", "new"]
+    },
+    {
+        category: "MUSIC",
+        title: "Explore a New Music Mood",
+        description: "Find music that matches the vibe you're looking for.",
+        keywords: ["music", "song", "listen", "relax"]
+    },
+    {
+        category: "MOVIES",
+        title: "Find a Movie for Your Mood",
+        description: "Discover a movie that fits your current vibe.",
+        keywords: ["movie", "film", "watch", "entertainment"]
+    },
+    {
+        category: "SURPRISE",
+        title: "Do Something Unexpected",
+        description: "Try something completely different from your normal routine.",
+        keywords: ["surprise", "random", "anything"]
+    },
+    {
+        category: "CHALLENGE",
+        title: "Try an Observation Challenge",
+        description: "Test how carefully you notice things around you.",
+        keywords: ["challenge", "observation", "focus"]
+    },
+    {
+        category: "GAME",
+        title: "Play a Speed Challenge",
+        description: "See how quickly you can complete a simple task.",
+        keywords: ["game", "speed", "fun", "play"]
+    }
+];
+
+const dailyActivities = [
+    "Learn one surprising fact.",
+    "Listen to a song you've never heard.",
+    "Try a new mini game.",
+    "Discover something about space.",
+    "Watch a short educational video.",
+    "Solve a puzzle."
+];
+
+const dailyChallenges = [
+    "Solve a riddle without searching for the answer.",
+    "Try something you've never tried before.",
+    "Complete a 60-second brain challenge.",
+    "Find three interesting things around you.",
+    "Learn one new fact and remember it."
+];
+
+const brainChallenges = [
+    {
+        question: "What has keys but cannot open locks?",
+        options: ["A piano", "A door", "A map", "A clock"],
+        answer: 0
+    },
+    {
+        question: "What number comes next: 2, 4, 8, 16, ?",
+        options: ["20", "24", "32", "36"],
+        answer: 2
+    },
+    {
+        question: "Which is heavier?",
+        options: [
+            "1 kg of cotton",
+            "1 kg of iron",
+            "Both weigh the same",
+            "It depends"
+        ],
+        answer: 2
+    }
+];
+
+let currentChallenge = 0;
+
+// -------------------------
+// Navigation
+// -------------------------
+
+const menu = document.getElementById("side-menu");
+const menuButton = document.getElementById("menu-button");
+
+menuButton.addEventListener("click", () => {
+    menu.classList.toggle("open");
+});
+
+document.querySelectorAll("nav button").forEach(button => {
+    button.addEventListener("click", () => {
+        showPage(button.dataset.section);
+        menu.classList.remove("open");
+    });
+});
+
+function showPage(id) {
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    const selected = document.getElementById(id);
+
+    if (selected) {
+        selected.classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+// -------------------------
+// Loading
+// -------------------------
+
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        const loading = document.getElementById("loading-screen");
+
+        if (loading) {
+            loading.style.display = "none";
+        }
+    }, 2200);
+
+    setDailyContent();
+    generateSuggestions("surprise");
+    loadChallenge();
+});
+
+// -------------------------
+// Daily Content
+// -------------------------
+
+function getDayIndex(arrayLength) {
+    const now = new Date();
+
+    const start = new Date(now.getFullYear(), 0, 0);
+    const difference = now - start;
+    const oneDay = 1000 * 60 * 60 * 24;
+
+    return Math.floor(difference / oneDay) % arrayLength;
+}
+
+function setDailyContent() {
+    document.getElementById("daily-activity").textContent =
+        dailyActivities[getDayIndex(dailyActivities.length)];
+
+    document.getElementById("daily-challenge").textContent =
+        dailyChallenges[getDayIndex(dailyChallenges.length)];
+}
+
+// -------------------------
+// Thought Generator
+// -------------------------
+
+const thoughtInput = document.getElementById("thought-input");
+const generateButton = document.getElementById("generate-button");
+const suggestionsContainer = document.getElementById("suggestions");
+
+generateButton.addEventListener("click", () => {
+    const text = thoughtInput.value.trim();
+
+    if (!text) {
+        showToast("Tell VibeX what's on your mind first.");
+        return;
+    }
+
+    generateSuggestions(text);
+});
+
+document.querySelectorAll(".quick-options button").forEach(button => {
+    button.addEventListener("click", () => {
+        const text = button.dataset.thought;
+
+        thoughtInput.value = text;
+        generateSuggestions(text);
+    });
+});
+
+function generateSuggestions(input) {
+    const lowerInput = input.toLowerCase();
+
+    let matching = suggestions.filter(item =>
+        item.keywords.some(keyword => lowerInput.includes(keyword))
+    );
+
+    let remaining = suggestions.filter(item => !matching.includes(item));
+
+    shuffle(matching);
+    shuffle(remaining);
+
+    const finalSuggestions = [...matching, ...remaining].slice(0, 5);
+
+    renderSuggestions(finalSuggestions);
+}
+
+function renderSuggestions(items) {
+    suggestionsContainer.innerHTML = "";
+
+    items.forEach(item => {
+        const card = document.createElement("div");
+
+        card.className = "suggestion-card";
+
+        card.innerHTML = `
+            <div class="category">${item.category}</div>
+
+            <h3>${item.title}</h3>
+
+            <p>${item.description}</p>
+
+            <div class="card-actions">
+                <button class="start-button">
+                    Start
+                </button>
+
+                <button class="favorite-button">
+                    ♡
+                </button>
+            </div>
+        `;
+
+        const startButton = card.querySelector(".start-button");
+
+        startButton.addEventListener("click", () => {
+            showToast(`Starting: ${item.title}`);
+        });
+
+        const favoriteButton =
+            card.querySelector(".favorite-button");
+
+        favoriteButton.addEventListener("click", () => {
+            favoriteButton.textContent = "♥";
+            showToast("Added to favorites ❤️");
+        });
+
+        suggestionsContainer.appendChild(card);
+    });
+}
+
+// -------------------------
+// Surprise Me
+// -------------------------
+
+document.getElementById("surprise-button")
+    .addEventListener("click", () => {
+
+        const button = document.getElementById("surprise-button");
+
+        button.textContent = "✨ Surprise!";
+
+        generateSuggestions("surprise random");
+
+        showToast("Your surprise is ready! ✨");
+
+        setTimeout(() => {
+            button.textContent = "🎲 Surprise Me";
+        }, 1200);
+    });
+
+// -------------------------
+// Search
+// -------------------------
+
+const searchInput = document.getElementById("search-input");
+const searchResults = document.getElementById("search-results");
+
+searchInput.addEventListener("input", () => {
+    const query = searchInput.value.trim().toLowerCase();
+
+    searchResults.innerHTML = "";
+
+    if (!query) {
+        return;
+    }
+
+    const results = suggestions.filter(item =>
+        item.title.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query) ||
+        item.category.toLowerCase().includes(query)
+    );
+
+    if (results.length === 0) {
+        searchResults.innerHTML =
+            `<div class="feature-card">
+                No results found.
+            </div>`;
+
+        return;
+    }
+
+    results.forEach(item => {
+        const result = document.createElement("div");
+
+        result.className = "content-list";
+
+        result.innerHTML = `
+            <div>
+                <strong>${item.title}</strong><br>
+                <small>${item.category}</small>
+            </div>
+        `;
+
+        searchResults.appendChild(result);
+    });
+});
+
+// -------------------------
+// Reaction Game
+// -------------------------
+
+const reactionButton =
+    document.getElementById("reaction-button");
+
+const reactionResult =
+    document.getElementById("reaction-result");
+
+let reactionStart = 0;
+let reactionTimer = null;
+let waitingForReaction = false;
+
+reactionButton.addEventListener("click", () => {
+
+    if (waitingForReaction) {
+        const reactionTime = Date.now() - reactionStart;
+
+        reactionResult.textContent =
+            `⚡ Your reaction time: ${reactionTime} ms`;
+
+        reactionButton.textContent = "Play Again";
+
+        waitingForReaction = false;
+
+        clearTimeout(reactionTimer);
+
+        return;
+    }
+
+    reactionButton.textContent = "Wait...";
+
+    reactionResult.textContent =
+        "Get ready...";
+
+    waitingForReaction = true;
+
+    const delay = 1000 + Math.random() * 3000;
+
+    reactionTimer = setTimeout(() => {
+
+        reactionStart = Date.now();
+
+        reactionButton.textContent =
+            "CLICK NOW! ⚡";
+
+        reactionResult.textContent =
+            "GO!";
+
+    }, delay);
+});
+
+// -------------------------
+// Brain Challenges
+// -------------------------
+
+function loadChallenge() {
+
+    const challenge =
+        brainChallenges[currentChallenge];
+
+    document.getElementById("challenge-question")
+        .textContent = challenge.question;
+
+    const optionsContainer =
+        document.getElementById("challenge-options");
+
+    optionsContainer.innerHTML = "";
+
+    challenge.options.forEach((option, index) => {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "challenge-option";
+
+        button.textContent =
+            option;
+
+        button.addEventListener("click", () => {
+
+            if (index === challenge.answer) {
+                showToast("Correct! 🧠");
+            } else {
+                showToast("Not quite. Try another one!");
+            }
+
+        });
+
+        optionsContainer.appendChild(button);
+    });
+}
+
+document.getElementById("next-challenge")
+    .addEventListener("click", () => {
+
+        currentChallenge++;
+
+        if (currentChallenge >= brainChallenges.length) {
+            currentChallenge = 0;
+        }
+
+        loadChallenge();
+    });
+
+// -------------------------
+// Notifications
+// -------------------------
+
+document.getElementById("notification-button")
+    .addEventListener("click", () => {
+        showPage("notifications");
+    });
+
+// -------------------------
+// Utility Functions
+// -------------------------
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [array[i], array[j]] =
+            [array[j], array[i]];
+    }
+
+    return array;
+}
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2200);
+}
